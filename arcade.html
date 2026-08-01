@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SURYANSH SHARMA // PLAYER 1</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --neon-blue:#00e5ff;
+    --neon-red:#ff1744;
+    --gold:#d4af37;
+    --bg:#08090c;
+    --panel:#101218;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:#e8e8ec;
+    font-family:'Rajdhani',sans-serif;
+    overflow-x:hidden;
+    position:relative;
+  }
+  h1,h2,h3,.orbitron{font-family:'Orbitron',sans-serif;}
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:60;
+    background:repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.025) 0px,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode:overlay;
+  }
+  body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:59;
+    box-shadow:inset 0 0 200px 60px rgba(0,0,0,0.85);
+  }
+
+  .diagonal{
+    clip-path: polygon(0 0, 100% 0, 100% 92%, 0% 100%);
+  }
+  .diagonal-rev{
+    clip-path: polygon(0 8%, 100% 0, 100% 100%, 0 100%);
+  }
+  .card-cut{
+    clip-path: polygon(18px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px);
+  }
+
+  .glow-blue{
+    box-shadow: 0 0 12px rgba(0,229,255,0.35), 0 0 2px rgba(0,229,255,0.6) inset;
+    border: 1px solid rgba(0,229,255,0.5);
+  }
+  .glow-red{
+    box-shadow: 0 0 12px rgba(255,23,68,0.35), 0 0 2px rgba(255,23,68,0.6) inset;
+    border: 1px solid rgba(255,23,68,0.5);
+  }
+  .glow-gold{
+    box-shadow: 0 0 12px rgba(212,175,55,0.35), 0 0 2px rgba(212,175,55,0.6) inset;
+    border: 1px solid rgba(212,175,55,0.5);
+  }
+
+  .glitch{
+    position:relative;
+    transition: transform .15s ease;
+  }
+  .glitch:hover{ transform: translateX(2px); }
+  .glitch::before, .glitch::after{
+    content: attr(data-text);
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    opacity:0;
+    background:inherit;
+  }
+  .glitch:hover::before{
+    opacity:0.85;
+    color:var(--neon-blue);
+    animation: glitchTop 0.35s steps(2,end) infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+  }
+  .glitch:hover::after{
+    opacity:0.85;
+    color:var(--neon-red);
+    animation: glitchBottom 0.3s steps(2,end) infinite;
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+  }
+  @keyframes glitchTop{
+    0%{ transform:translate(0,0); }
+    50%{ transform:translate(-3px,-1px); }
+    100%{ transform:translate(2px,1px); }
+  }
+  @keyframes glitchBottom{
+    0%{ transform:translate(0,0); }
+    50%{ transform:translate(3px,1px); }
+    100%{ transform:translate(-2px,-1px); }
+  }
+
+  .stat-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--neon-blue), #7cf9ff);
+    box-shadow:0 0 10px var(--neon-blue);
+    transform-origin:left;
+    animation: fillBar 1.4s ease forwards;
+  }
+  @keyframes fillBar{
+    from{ transform:scaleX(0); }
+    to{ transform:scaleX(1); }
+  }
+
+  .nav-link{
+    position:relative;
+    letter-spacing:0.12em;
+  }
+  .nav-link::after{
+    content:"";
+    position:absolute;
+    left:0; bottom:-4px;
+    width:0; height:2px;
+    background:var(--neon-blue);
+    box-shadow:0 0 8px var(--neon-blue);
+    transition:width .25s ease;
+  }
+  .nav-link:hover::after{ width:100%; }
+
+  .fade-up{
+    opacity:0;
+    transform:translateY(24px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .fade-up.show{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  ::-webkit-scrollbar{ width:8px; }
+  ::-webkit-scrollbar-track{ background:#0a0a0f; }
+  ::-webkit-scrollbar-thumb{ background:var(--neon-blue); }
+
+  .bg-grid{
+    background-image:
+      linear-gradient(rgba(0,229,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.05) 1px, transparent 1px);
+    background-size: 42px 42px;
+  }
+
+  .flicker{
+    animation: flicker 3.2s infinite;
+  }
+  @keyframes flicker{
+    0%,19%,21%,23%,25%,54%,56%,100%{ opacity:1; }
+    20%,22%,24%,55%{ opacity:0.6; }
+  }
+
+  .medal{
+    position:relative;
+    overflow:hidden;
+  }
+  .medal::before{
+    content:"";
+    position:absolute;
+    top:-50%; left:-60%;
+    width:40%; height:200%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.15), transparent);
+    transform:rotate(20deg);
+    transition:left .6s ease;
+  }
+  .medal:hover::before{ left:120%; }
+
+  /* --- CHARACTER CARD (photo) --- */
+  .char-card{
+    animation: cardPulse 3.5s ease-in-out infinite;
+  }
+  @keyframes cardPulse{
+    0%,100%{ box-shadow: 0 0 12px rgba(0,229,255,0.35), 0 0 2px rgba(0,229,255,0.6) inset; }
+    50%{ box-shadow: 0 0 26px rgba(0,229,255,0.65), 0 0 4px rgba(0,229,255,0.9) inset; }
+  }
+  .char-photo{
+    filter: grayscale(25%) contrast(1.15) saturate(1.15) brightness(0.95);
+    transition: filter .4s ease, transform .5s ease;
+  }
+  .char-card:hover .char-photo{
+    filter: grayscale(0%) contrast(1.2) saturate(1.3) brightness(1);
+    transform: scale(1.04);
+  }
+  .duotone-overlay{
+    background:
+      linear-gradient(160deg, rgba(0,229,255,0.22) 0%, transparent 40%),
+      linear-gradient(-20deg, rgba(255,23,68,0.18) 0%, transparent 45%);
+    mix-blend-mode: color-dodge;
+    pointer-events:none;
+  }
+  .scanner-line{
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,229,255,0.08) 0px,
+      rgba(0,229,255,0.08) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+    animation: scanMove 4s linear infinite;
+  }
+  @keyframes scanMove{
+    0%{ background-position-y:0; }
+    100%{ background-position-y:200px; }
+  }
+  .corner{
+    position:absolute;
+    width:18px; height:18px;
+    border-color: var(--neon-blue);
+    z-index:10;
+    filter: drop-shadow(0 0 4px var(--neon-blue));
+  }
+  .corner-tl{ top:8px; left:8px; border-top:2px solid; border-left:2px solid; }
+  .corner-tr{ top:8px; right:8px; border-top:2px solid; border-right:2px solid; }
+  .corner-bl{ bottom:8px; left:8px; border-bottom:2px solid; border-left:2px solid; }
+  .corner-br{ bottom:8px; right:8px; border-bottom:2px solid; border-right:2px solid; }
+  .id-badge{
+    background: rgba(0,0,0,0.75);
+    border-left: 3px solid var(--neon-red);
+    backdrop-filter: blur(2px);
+  }
+  .ready-tag{
+    letter-spacing:0.25em;
+  }
+</style>
+</head>
+<body class="bg-grid">
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 w-full z-50 bg-black/70 backdrop-blur-md border-b border-cyan-500/20">
+  <div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
+    <span class="orbitron text-lg font-black tracking-widest text-white">S<span class="text-cyan-400">S</span><span class="text-red-500">.</span></span>
+    <div class="hidden md:flex gap-8 text-sm orbitron font-medium">
+      <a href="#hero" class="nav-link text-gray-300 hover:text-cyan-400">HOME</a>
+      <a href="#moves" class="nav-link text-gray-300 hover:text-cyan-400">MOVE LIST</a>
+      <a href="#stage" class="nav-link text-gray-300 hover:text-cyan-400">STAGE SELECT</a>
+      <a href="#arcade" class="nav-link text-gray-300 hover:text-cyan-400">ARCADE MODE</a>
+      <a href="#achievements" class="nav-link text-gray-300 hover:text-cyan-400">TROPHIES</a>
+      <a href="#contact" class="nav-link text-gray-300 hover:text-cyan-400">CONTINUE?</a>
+    </div>
+    <button id="menuBtn" class="md:hidden text-cyan-400 orbitron text-xl">☰</button>
+  </div>
+  <div id="mobileMenu" class="hidden md:hidden flex-col bg-black/95 border-t border-cyan-500/20 px-6 py-4 gap-4 orbitron text-sm">
+    <a href="#hero" class="block py-2 text-gray-300">HOME</a>
+    <a href="#moves" class="block py-2 text-gray-300">MOVE LIST</a>
+    <a href="#stage" class="block py-2 text-gray-300">STAGE SELECT</a>
+    <a href="#arcade" class="block py-2 text-gray-300">ARCADE MODE</a>
+    <a href="#achievements" class="block py-2 text-gray-300">TROPHIES</a>
+    <a href="#contact" class="block py-2 text-gray-300">CONTINUE?</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="min-h-screen flex items-center justify-center relative pt-24 px-6">
+  <div class="absolute top-24 left-6 md:left-12 orbitron text-xs tracking-[0.4em] text-red-500 flicker">PLAYER 1 READY</div>
+  <div class="max-w-5xl w-full grid md:grid-cols-5 gap-10 items-center">
+    <div class="md:col-span-3">
+      <h1 class="glitch orbitron text-5xl md:text-7xl font-black text-white leading-none mb-4" data-text="SURYANSH SHARMA">
+        SURYANSH<br>SHARMA
+      </h1>
+      <div class="h-1 w-24 bg-cyan-400 mb-4 shadow-[0_0_10px_#00e5ff]"></div>
+      <p class="orbitron text-base md:text-xl text-cyan-300 tracking-wide mb-8">
+        MACHINE LEARNING RESEARCHER &amp; COMPETITIVE PROGRAMMER
+      </p>
+
+      <div class="space-y-4 max-w-md">
+        <div>
+          <div class="flex justify-between text-xs orbitron text-gray-400 mb-1">
+            <span>INSTITUTION</span><span class="text-white">NIT PATNA — CSE '27</span>
+          </div>
+          <div class="h-2 bg-gray-800 rounded-sm overflow-hidden card-cut"><div class="stat-fill" style="width:100%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-xs orbitron text-gray-400 mb-1">
+            <span>CGPA</span><span class="text-white">8.17 / 10</span>
+          </div>
+          <div class="h-2 bg-gray-800 rounded-sm overflow-hidden card-cut"><div class="stat-fill" style="width:82%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-xs orbitron text-gray-400 mb-1">
+            <span>LEETCODE RATING</span><span class="text-white">1826 (Max)</span>
+          </div>
+          <div class="h-2 bg-gray-800 rounded-sm overflow-hidden card-cut"><div class="stat-fill" style="width:87%; background:linear-gradient(90deg,var(--neon-red),#ff6e91); box-shadow:0 0 10px var(--neon-red);"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="md:col-span-2 flex justify-center">
+      <div class="char-card w-56 h-72 md:w-64 md:h-80 card-cut glow-blue bg-[#0d0f14] flex flex-col items-center justify-center relative overflow-hidden group">
+
+        <!-- Photo -->
+        <img src="18720.jpg.jpeg" alt="Suryansh Sharma" class="char-photo absolute inset-0 w-full h-full object-cover" style="object-position:50% 15%;">
+
+        <!-- Scanline sweep -->
+        <div class="scanner-line absolute inset-0"></div>
+
+        <!-- Duotone color overlay to match theme -->
+        <div class="duotone-overlay absolute inset-0"></div>
+
+        <!-- Top-down darken for framing, bottom darken for label -->
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80"></div>
+
+        <!-- Corner brackets (character-select frame) -->
+        <span class="corner corner-tl"></span>
+        <span class="corner corner-tr"></span>
+        <span class="corner corner-bl"></span>
+        <span class="corner corner-br"></span>
+
+        <!-- Ready tag -->
+        <span class="ready-tag absolute top-3 right-3 orbitron text-[9px] text-cyan-300 bg-black/60 px-2 py-1 card-cut border border-cyan-400/40">P1</span>
+
+        <!-- ID label -->
+        <div class="id-badge absolute bottom-0 left-0 right-0 px-4 py-3">
+          <span class="orbitron text-lg font-black text-white block leading-tight">SURYANSH</span>
+          <span class="orbitron text-[10px] tracking-[0.3em] text-cyan-400">CHALLENGER_ID // 001</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOVE LIST -->
+<section id="moves" class="py-24 px-6 relative">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="fade-up orbitron text-3xl md:text-4xl font-black text-white mb-2">MOVE <span class="text-cyan-400">LIST</span></h2>
+    <p class="fade-up text-gray-500 orbitron text-xs tracking-[0.3em] mb-12">TECHNICAL COMMAND INPUTS</p>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="fade-up card-cut glow-blue bg-[#0d0f14] p-6">
+        <h3 class="orbitron text-cyan-400 text-sm tracking-widest mb-4">LANGUAGES</h3>
+        <ul class="space-y-2 text-lg font-semibold">
+          <li>C++</li><li>Python</li><li>JavaScript</li><li>SQL</li>
+        </ul>
+      </div>
+      <div class="fade-up card-cut glow-red bg-[#0d0f14] p-6">
+        <h3 class="orbitron text-red-500 text-sm tracking-widest mb-4">DOMAINS</h3>
+        <ul class="space-y-2 text-lg font-semibold">
+          <li>Machine Learning</li><li>Computer Vision</li><li>Affective Computing <span class="text-gray-500 text-sm">(EEG / Eye-Tracking)</span></li><li>NLP</li>
+        </ul>
+      </div>
+      <div class="fade-up card-cut glow-gold bg-[#0d0f14] p-6">
+        <h3 class="orbitron text-yellow-400 text-sm tracking-widest mb-4">STACK</h3>
+        <ul class="space-y-2 text-lg font-semibold">
+          <li>MERN</li><li>Django</li><li>PyTorch</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAGE SELECT -->
+<section id="stage" class="py-24 px-6 bg-[#0b0c11] relative diagonal">
+  <div class="max-w-6xl mx-auto pb-10">
+    <h2 class="fade-up orbitron text-3xl md:text-4xl font-black text-white mb-2">STAGE <span class="text-red-500">SELECT</span></h2>
+    <p class="fade-up text-gray-500 orbitron text-xs tracking-[0.3em] mb-12">EXPERIENCE TIMELINE</p>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="fade-up card-cut border border-gray-700 bg-[#101218] p-6 hover:glow-gold transition">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="orbitron text-lg font-bold text-white">Machine Learning Engineer Intern</h3>
+          <span class="text-xs orbitron text-gray-500">CLEARED</span>
+        </div>
+        <p class="text-cyan-300 text-sm mb-1">Trialshopy</p>
+      </div>
+
+      <div class="fade-up card-cut border border-gray-700 bg-[#101218] p-6 hover:glow-gold transition">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="orbitron text-lg font-bold text-white">Data Scientist Intern</h3>
+          <span class="text-xs orbitron text-gray-500">CLEARED</span>
+        </div>
+        <p class="text-cyan-300 text-sm mb-1">Prodigy Infotech</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCADE MODE -->
+<section id="arcade" class="py-24 px-6 relative">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="fade-up orbitron text-3xl md:text-4xl font-black text-white mb-2">ARCADE <span class="text-yellow-400">MODE</span></h2>
+    <p class="fade-up text-gray-500 orbitron text-xs tracking-[0.3em] mb-12">SELECT YOUR ROUND</p>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="fade-up card-cut bg-[#0d0f14] border border-cyan-500/30 p-6 hover:glow-blue transition group flex flex-col">
+        <div class="orbitron text-xs text-cyan-400 mb-2">ROUND 01</div>
+        <h3 class="glitch text-lg font-bold text-white mb-3" data-text="Trading Platform Simulator">Trading Platform Simulator</h3>
+        <p class="text-gray-400 text-sm mb-4 flex-1">High-performance C++ trading engine — modular order book, O(log N) lookups via balanced trees + hash maps.</p>
+        <a href="https://github.com/Lecrupus/Cryptocurrency-Trading-Platform-" target="_blank" rel="noopener" class="orbitron text-xs tracking-widest text-cyan-400 hover:text-white inline-flex items-center gap-1">
+          VIEW REPO <span class="transition group-hover:translate-x-1">→</span>
+        </a>
+      </div>
+
+      <div class="fade-up card-cut bg-[#0d0f14] border border-red-500/30 p-6 hover:glow-red transition group flex flex-col">
+        <div class="orbitron text-xs text-red-500 mb-2">ROUND 02</div>
+        <h3 class="glitch text-lg font-bold text-white mb-3" data-text="Multimodal Sentiment Analysis">Multimodal Sentiment Analysis</h3>
+        <p class="text-gray-400 text-sm mb-4 flex-1">BERT + CNN fusion model — text and video signal integration, +12% F1 over single-modal baselines.</p>
+        <a href="https://github.com/Lecrupus/Multimodal-Sentiment-Analysis" target="_blank" rel="noopener" class="orbitron text-xs tracking-widest text-red-400 hover:text-white inline-flex items-center gap-1">
+          VIEW REPO <span class="transition group-hover:translate-x-1">→</span>
+        </a>
+      </div>
+
+      <div class="fade-up card-cut bg-[#0d0f14] border border-yellow-500/30 p-6 hover:glow-gold transition group flex flex-col">
+        <div class="orbitron text-xs text-yellow-400 mb-2">FINAL BOSS</div>
+        <h3 class="glitch text-lg font-bold text-white mb-3" data-text="Meta PyTorch OpenEnv Hackathon">Meta PyTorch OpenEnv Hackathon</h3>
+        <p class="text-gray-400 text-sm mb-4 flex-1">Grand Finale, Bangalore — built and presented custom PyTorch environments under live evaluation.</p>
+        <span class="orbitron text-xs tracking-widest text-yellow-500/60">NO PUBLIC REPO</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS UNLOCKED -->
+<section id="achievements" class="py-24 px-6 bg-[#0b0c11] diagonal relative">
+  <div class="max-w-6xl mx-auto pb-10">
+    <h2 class="fade-up orbitron text-3xl md:text-4xl font-black text-white mb-2">ACHIEVEMENTS <span class="text-cyan-400">UNLOCKED</span></h2>
+    <p class="fade-up text-gray-500 orbitron text-xs tracking-[0.3em] mb-12">TROPHY CASE</p>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="fade-up medal card-cut glow-gold bg-[#101218] p-6 text-center">
+        <div class="orbitron text-4xl font-black text-yellow-400 mb-2">🏆</div>
+        <h3 class="orbitron text-white font-bold mb-1">Amazon MLSS 2026</h3>
+        <p class="text-gray-400 text-sm">Selected for Amazon Machine Learning Summer School</p>
+      </div>
+
+      <div class="fade-up medal card-cut glow-red bg-[#101218] p-6 text-center">
+        <div class="orbitron text-4xl font-black text-red-500 mb-2">★★★</div>
+        <h3 class="orbitron text-white font-bold mb-1">CodeChef — 3 Star</h3>
+        <p class="text-gray-400 text-sm">Max rating 1621, 3-star competitive programmer</p>
+      </div>
+
+      <div class="fade-up medal card-cut glow-blue bg-[#101218] p-6 text-center">
+        <div class="orbitron text-4xl font-black text-cyan-400 mb-2">650+</div>
+        <h3 class="orbitron text-white font-bold mb-1">LeetCode Problems</h3>
+        <p class="text-gray-400 text-sm">650+ problems solved, max rating 1826</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-24 px-6 diagonal-rev">
+  <div class="max-w-3xl mx-auto text-center pt-10">
+    <h2 class="fade-up orbitron text-3xl md:text-4xl font-black text-white mb-4">CONTINUE<span class="text-cyan-400">?</span></h2>
+    <p class="fade-up text-gray-400 mb-8">Insert coin to connect.</p>
+    <div class="fade-up flex flex-wrap justify-center gap-4">
+      <a href="mailto:suryanshs.ug23.cs@nitp.ac.in" class="orbitron text-sm px-6 py-3 card-cut glow-blue text-cyan-300 hover:bg-cyan-500/10 transition">EMAIL</a>
+      <a href="https://linkedin.com/in/suryansh-sharma" target="_blank" class="orbitron text-sm px-6 py-3 card-cut glow-red text-red-300 hover:bg-red-500/10 transition">LINKEDIN</a>
+      <a href="https://github.com/lecrupus" target="_blank" class="orbitron text-sm px-6 py-3 card-cut glow-gold text-yellow-300 hover:bg-yellow-500/10 transition">GITHUB</a>
+    </div>
+  </div>
+</section>
+
+<footer class="text-center py-6 text-gray-600 text-xs orbitron tracking-widest">
+  © 2027 SURYANSH SHARMA — PRESS START TO CONTINUE
+</footer>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    mobileMenu.classList.toggle('flex');
+  });
+  document.querySelectorAll('#mobileMenu a').forEach(a=>{
+    a.addEventListener('click', ()=> {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+    });
+  });
+
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('show');
+    });
+  }, {threshold:0.15});
+  document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
